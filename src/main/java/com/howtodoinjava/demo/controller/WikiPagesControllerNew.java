@@ -94,9 +94,7 @@ public class WikiPagesControllerNew {
                         set1 = redis.zrangeByLex("wordset", "[" + a1, "(" + a2);
                     }
                     for (String str :set1){
-
                         result.add(str);
-
                         if (result.size() >= 10)
                             break;
                     }
@@ -104,12 +102,17 @@ public class WikiPagesControllerNew {
                 }
                 else {
                     char ca = wordSearch.charAt(wordSearch.length() - 1);
-                    ca = (char) (ca + 1);
-                    String wordNext = wordSearch.substring(0, wordSearch.length() - 1) + ca;
-                    set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordNext);
+                    if (ca == 'z' || ca == 'Z') {
+                        set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordSearch+'a');
+                    }
+                    else{
+                        ca = (char) (ca + 1);
+                        String wordNext = wordSearch.substring(0, wordSearch.length() - 1) + ca;
+                        set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordNext);
+                    }
+
                     for (String str :set1){
                         result.add(str);
-
                         if (result.size() >= 10)
                             break;
                     }
