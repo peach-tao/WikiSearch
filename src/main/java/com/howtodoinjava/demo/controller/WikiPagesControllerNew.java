@@ -48,7 +48,7 @@ public class WikiPagesControllerNew {
         // 如果页面为空 --> 页面获取所有doc
         // if用户输入的数据为空  那么list取10条
         // else 从保存在内存中的pages中找 ， 把包含关键词的文档加入list
-
+        logger.info("search word :"+searchParam.getWord());
         if (pages.isEmpty()) {
             pages = dao.getAllWikiDocs();
         }
@@ -64,13 +64,14 @@ public class WikiPagesControllerNew {
                 }
             }
         }
-        logger.info("search word :",searchParam.getWord());
+
         return result;
     }
 
     @RequestMapping(value="/suggestWord.do", method=RequestMethod.POST)
     @ResponseBody
     public List<String> suggestWord(@RequestBody SearchParam searchParam) {
+        logger.info("search word :"+searchParam.getWord());
         if (pages.isEmpty()) {
             pages = dao.getAllWikiDocs();
         }
