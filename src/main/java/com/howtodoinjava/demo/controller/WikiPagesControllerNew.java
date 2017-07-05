@@ -2,7 +2,6 @@ package com.howtodoinjava.demo.controller;
 
 import com.howtodoinjava.demo.dao.WikiDocDao;
 import com.howtodoinjava.demo.model.WikiDocVo;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,35 +85,37 @@ public class WikiPagesControllerNew {
                 if(searchParam.getWord().length()==1){
                     char a1 = searchParam.getWord().charAt(0);
                     char a2 ;
-                    if(a1=='z'||a1=='Z') {
-                        set1 = redis.zrangeByLex("wordset", "[" + a1, "("+a1+'a');
+                    if(a1=='z') {
+                        set1 = redis.zrangeByLex("wordset", "[" + a1, "("+a1+'a',0,10);
+                    }
+                    else if(a1=='Z'){
+                        set1 = redis.zrangeByLex("wordset", "[" + a1, "("+a1+'A',0,10);
                     }
                     else{
                         a2 = (char)(a1+1);
-                        set1 = redis.zrangeByLex("wordset", "[" + a1, "(" + a2);
+                        set1 = redis.zrangeByLex("wordset", "[" + a1, "(" + a2,0,10);
                     }
                     for (String str :set1){
                         result.add(str);
-                        if (result.size() >= 10)
-                            break;
                     }
                     break;
                 }
                 else {
                     char ca = wordSearch.charAt(wordSearch.length() - 1);
-                    if (ca == 'z' || ca == 'Z') {
-                        set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordSearch+'a');
+                    if (ca == 'z' ) {
+                        set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordSearch+'a',0,10);
+                    }
+                    else if(ca == 'Z'){
+                       set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordSearch+'A',0,10);
                     }
                     else{
                         ca = (char) (ca + 1);
                         String wordNext = wordSearch.substring(0, wordSearch.length() - 1) + ca;
-                        set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordNext);
+                        set1 = redis.zrangeByLex("wordset", "[" + wordSearch, "(" + wordNext,0,10);
                     }
 
                     for (String str :set1){
                         result.add(str);
-                        if (result.size() >= 10)
-                            break;
                     }
                     break;
                 }
